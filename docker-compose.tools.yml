@@ -2,9 +2,9 @@ name: "go-admin-wallet-wallet-service"
 services:
   go-tools:
     container_name: ${GROUP_NAME:-phillong97254}-wallet-service-go-tools-${ENV:-dev}
-    # Image công cụ dev (migrate, buf, protoc-gen-go...) từ repo github.com/phillong97254/go-tools.
-    # Chưa có image thì Docker tự build từ git tag, không cần registry.
-    image: ghcr.io/phillong97254/go-tools:v1.0.0
+    # Image công cụ dev (migrate, buf, protoc-gen-go...): Docker Hub phillong2504/go-tools,
+    # Dockerfile ở github.com/phillong97254/go-tools (không pull được thì build từ git tag).
+    image: phillong2504/go-tools:v1.0.0
     build:
       context: https://github.com/phillong97254/go-tools.git#v1.0.0
     volumes:
