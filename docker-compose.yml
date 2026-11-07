@@ -12,8 +12,34 @@ services:
     environment:
       GRPC_SERVER_ADDR: ":50051"
       OAUTH_JWKS_URL: http://host.docker.internal:9000/.well-known/jwks.json
+      DB_URL: postgres://wallet:${DB_PASSWORD:?đặt trong .env (xem .env.example)}@postgres:5432/wallet_db?sslmode=disable
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - wallet-service-network
+
+  # Postgres riêng của service (database-per-service). Dữ liệu ở ./tmp/postgres_data (không commit).
+  postgres:
+    container_name: wallet-service-postgres-${ENV:-dev}
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: wallet
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?đặt trong .env (xem .env.example)}
+      POSTGRES_DB: wallet_db
+      TZ: UTC
+    volumes:
+      - ./tmp/postgres_data:/var/lib/postgresql/data
+    ports:
+      - "54323:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U wallet -d wallet_db"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
     restart: unless-stopped
     networks:
       - wallet-service-network

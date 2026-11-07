@@ -6,3 +6,12 @@ services:
     volumes:
       - .:/tool
     working_dir: /tool
+    environment:
+      PROTO_GEN_CONFIG_FILE: "buf.gen.yaml"
+      DB_URL: postgres://wallet:${DB_PASSWORD:?đặt trong .env (xem .env.example)}@postgres:5432/wallet_db?sslmode=disable
+    networks:
+      - wallet-service-network
+
+networks:
+  wallet-service-network:
+    driver: bridge

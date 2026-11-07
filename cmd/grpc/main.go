@@ -15,12 +15,13 @@ import (
 	"google.golang.org/grpc"
 
 	auth "github.com/phillong97254/go-lib/authkit"
+	"github.com/phillong97254/go-lib/database"
 	"github.com/phillong97254/wallet-service/cmd/grpc/routes"
 	"github.com/phillong97254/wallet-service/config"
 	v1 "github.com/phillong97254/wallet-service/internal/handler/grpc/v1"
 	"github.com/phillong97254/wallet-service/internal/repository"
-	"github.com/phillong97254/wallet-service/internal/repository/memstore"
 	"github.com/phillong97254/wallet-service/internal/service/wallet"
+	"github.com/phillong97254/wallet-service/migration"
 )
 
 func main() {
@@ -37,8 +38,26 @@ func main() {
 	// Authorize: verify JWT bằng JWKS của auth-service
 	verifier := auth.NewVerifier(cfg.OAuth.JWKSURL, cfg.OAuth.Issuer, cfg.OAuth.Audience)
 
+	// Init Database (+ migration)
+	db, err := database.New(database.Config{
+		URL:                   cfg.DB.URL,
+		MaxOpenConnections:    cfg.DB.MaxOpenConnections,
+		MaxIdleConnections:    cfg.DB.MaxIdleConnections,
+		ConnectionMaxLifetime: cfg.DB.ConnectionMaxLifetime,
+		ConnectionMaxIdleTime: cfg.DB.ConnectionMaxIdleTime,
+		LogSQL:                cfg.DB.LogSQL,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	if cfg.DB.AutoMigrate {
+		if err := database.Migrate(cfg.DB.URL, migration.FS, migration.Dir); err != nil {
+			log.Fatal(err)
+		}
+	}
+
 	// Repository -> Service -> Handler
-	repo := repository.New(memstore.New())
+	repo := repository.New(db)
 	walletService := wallet.New(logger, repo)
 	handler := v1.New(logger, walletService)
 

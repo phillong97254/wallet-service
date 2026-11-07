@@ -7,10 +7,16 @@ import (
 	"github.com/phillong97254/wallet-service/internal/domain"
 )
 
-func (i *impl) Create(_ context.Context, tx domain.Transaction) (domain.Transaction, error) {
-	i.store.Mu.Lock()
-	defer i.store.Mu.Unlock()
-	tx.ID = fmt.Sprintf("tx-%d", len(i.store.Transactions[tx.AdminID])+1)
-	i.store.Transactions[tx.AdminID] = append(i.store.Transactions[tx.AdminID], tx)
+// Create gán ID tx-<n> theo từng ví rồi lưu. Gọi trong Tx sau khi đã khoá dòng ví
+// (GetByAdminIDForUpdate) để 2 giao dịch đồng thời không lấy trùng số.
+func (i *impl) Create(ctx context.Context, tx domain.Transaction) (domain.Transaction, error) {
+	var n int64
+	if err := i.db.WithContext(ctx).Model(&domain.Transaction{}).Where("admin_id = ?", tx.AdminID).Count(&n).Error; err != nil {
+		return domain.Transaction{}, err
+	}
+	tx.ID = fmt.Sprintf("tx-%d", n+1)
+	if err := i.db.WithContext(ctx).Create(&tx).Error; err != nil {
+		return domain.Transaction{}, err
+	}
 	return tx, nil
 }

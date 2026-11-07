@@ -1,11 +1,11 @@
 package wallet
 
-import "github.com/phillong97254/wallet-service/internal/repository/memstore"
+import "gorm.io/gorm"
 
 type impl struct {
-	store *memstore.Store
+	db *gorm.DB
 }
 
-func New(store *memstore.Store) Repository {
-	return &impl{store: store}
+func New(db *gorm.DB) Repository {
+	return &impl{db: db}
 }

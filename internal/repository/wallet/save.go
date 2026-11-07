@@ -6,9 +6,7 @@ import (
 	"github.com/phillong97254/wallet-service/internal/domain"
 )
 
-func (i *impl) Save(_ context.Context, w domain.Wallet) error {
-	i.store.Mu.Lock()
-	defer i.store.Mu.Unlock()
-	i.store.Wallets[w.AdminID] = w
-	return nil
+func (i *impl) Save(ctx context.Context, w domain.Wallet) error {
+	return i.db.WithContext(ctx).Model(&domain.Wallet{}).Where("admin_id = ?", w.AdminID).
+		Updates(map[string]any{"balance": w.Balance, "updated_at": w.UpdatedAt}).Error
 }

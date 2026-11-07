@@ -25,7 +25,7 @@ func (i *impl) AdjustBalance(ctx context.Context, input AdjustBalanceInput) (Wal
 
 	var updated domain.Wallet
 	err := i.repo.Tx(ctx, func(tx repository.Registry) error {
-		w, err := tx.Wallet().GetByAdminID(ctx, input.AdminID)
+		w, err := tx.Wallet().GetByAdminIDForUpdate(ctx, input.AdminID)
 		if errors.Is(err, walletRepo.ErrNotFound) {
 			return fmt.Errorf("wallet of %q not found: %w", input.AdminID, ErrNotFound)
 		}

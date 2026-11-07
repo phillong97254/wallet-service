@@ -5,18 +5,50 @@ import (
 	"errors"
 	"io"
 	"log/slog"
+	"os"
 	"sync"
 	"testing"
 
 	"github.com/golang-jwt/jwt/v5"
 
 	auth "github.com/phillong97254/go-lib/authkit"
+	"github.com/phillong97254/go-lib/database"
 	"github.com/phillong97254/wallet-service/internal/repository"
-	"github.com/phillong97254/wallet-service/internal/repository/memstore"
+	"github.com/phillong97254/wallet-service/migration"
 )
 
-func newTestService() Service {
-	return New(slog.New(slog.NewTextHandler(io.Discard, nil)), repository.New(memstore.New()))
+// newTestService chạy với Postgres thật: đặt TEST_DB_URL (DB riêng cho test, sẽ bị xoá dữ liệu),
+// ví dụ TEST_DB_URL=postgres://postgres:postgres@localhost:54323/wallet_test?sslmode=disable make test
+func newTestService(t *testing.T) Service {
+	t.Helper()
+	url := os.Getenv("TEST_DB_URL")
+	if url == "" {
+		t.Skip("TEST_DB_URL chưa đặt, bỏ qua test cần Postgres")
+	}
+	if err := database.Migrate(url, migration.FS, migration.Dir); err != nil {
+		t.Fatal(err)
+	}
+	db, err := database.New(database.Config{URL: url, MaxOpenConnections: 20})
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Reset dữ liệu về seed
+	seed, err := migration.FS.ReadFile("scripts/000000002_seed.up.sql")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := db.Exec("TRUNCATE transactions, wallets RESTART IDENTITY").Error; err != nil {
+		t.Fatal(err)
+	}
+	if err := db.Exec(string(seed)).Error; err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() {
+		if sqlDB, err := db.DB(); err == nil {
+			sqlDB.Close()
+		}
+	})
+	return New(slog.New(slog.NewTextHandler(io.Discard, nil)), repository.New(db))
 }
 
 func ctxAs(sub string, roles ...string) context.Context {
@@ -40,7 +72,7 @@ func TestAdjustBalance(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			svc := newTestService()
+			svc := newTestService(t)
 			out, err := svc.AdjustBalance(ctxAs("bob", "admin", "superadmin"), AdjustBalanceInput{AdminID: tt.adminID, Amount: tt.amount})
 			if !errors.Is(err, tt.wantErr) {
 				t.Fatalf("err = %v, want %v", err, tt.wantErr)
@@ -53,7 +85,7 @@ func TestAdjustBalance(t *testing.T) {
 }
 
 func TestAdjustBalanceRecordsAudit(t *testing.T) {
-	svc := newTestService()
+	svc := newTestService(t)
 	ctx := ctxAs("bob", "admin", "superadmin")
 	if _, err := svc.AdjustBalance(ctx, AdjustBalanceInput{AdminID: "alice", Amount: 100, Note: "bonus"}); err != nil {
 		t.Fatal(err)
@@ -68,9 +100,9 @@ func TestAdjustBalanceRecordsAudit(t *testing.T) {
 	}
 }
 
-// Nhiều request trừ tiền song song không được làm số dư âm (Tx tuần tự hoá đọc-kiểm tra-ghi).
+// Nhiều request trừ tiền song song không được làm số dư âm (SELECT ... FOR UPDATE trong Tx).
 func TestAdjustBalanceConcurrent(t *testing.T) {
-	svc := newTestService()
+	svc := newTestService(t)
 	ctx := ctxAs("bob", "admin", "superadmin")
 	var wg sync.WaitGroup
 	for range 100 {
@@ -91,7 +123,7 @@ func TestAdjustBalanceConcurrent(t *testing.T) {
 }
 
 func TestGetWalletAccess(t *testing.T) {
-	svc := newTestService()
+	svc := newTestService(t)
 	if _, err := svc.GetWallet(ctxAs("alice", "admin"), GetWalletInput{AdminID: "alice"}); err != nil {
 		t.Fatalf("alice xem ví mình: %v", err)
 	}

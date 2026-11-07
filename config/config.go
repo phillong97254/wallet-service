@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"strings"
 
 	"github.com/spf13/viper"
@@ -10,6 +11,18 @@ type Config struct {
 	GRPCServer GRPCServer `mapstructure:"grpc_server"`
 	API        API        `mapstructure:"api"`
 	OAuth      OAuth      `mapstructure:"oauth"`
+	DB         Database   `mapstructure:"db"`
+}
+
+// Database: URL (có mật khẩu) lấy từ env DB_URL, không để trong config.yml.
+type Database struct {
+	URL                   string `mapstructure:"url"`
+	MaxOpenConnections    int    `mapstructure:"max_open_connections"`
+	MaxIdleConnections    int    `mapstructure:"max_idle_connections"`
+	ConnectionMaxLifetime int    `mapstructure:"connection_max_lifetime"`  // phút
+	ConnectionMaxIdleTime int    `mapstructure:"connection_max_idle_time"` // phút
+	AutoMigrate           bool   `mapstructure:"auto_migrate"`             // chạy migration/scripts khi khởi động
+	LogSQL                bool   `mapstructure:"log_sql"`
 }
 
 type GRPCServer struct {
@@ -48,6 +61,9 @@ func NewConfig() (*Config, error) {
 
 	if err := v.Unmarshal(&cfg); err != nil {
 		return nil, err
+	}
+	if cfg.DB.URL == "" {
+		return nil, errors.New("missing DB_URL (xem .env.example)")
 	}
 
 	return &cfg, nil

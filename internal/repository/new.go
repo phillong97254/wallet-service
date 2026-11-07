@@ -4,14 +4,14 @@ import (
 	"context"
 	"sync"
 
-	"github.com/phillong97254/wallet-service/internal/repository/memstore"
+	"gorm.io/gorm"
+
 	"github.com/phillong97254/wallet-service/internal/repository/transaction"
 	"github.com/phillong97254/wallet-service/internal/repository/wallet"
 )
 
 type impl struct {
-	store *memstore.Store
-	txMu  *sync.Mutex
+	db *gorm.DB
 
 	wallet     wallet.Repository
 	walletOnce sync.Once
@@ -20,24 +20,24 @@ type impl struct {
 	transactionOnce sync.Once
 }
 
-func New(store *memstore.Store) Registry {
-	return &impl{store: store, txMu: &sync.Mutex{}}
+func New(db *gorm.DB) Registry {
+	return &impl{db: db}
 }
 
 func (i *impl) Wallet() wallet.Repository {
-	i.walletOnce.Do(func() { i.wallet = wallet.New(i.store) })
+	i.walletOnce.Do(func() { i.wallet = wallet.New(i.db) })
 	return i.wallet
 }
 
 func (i *impl) Transaction() transaction.Repository {
-	i.transactionOnce.Do(func() { i.transaction = transaction.New(i.store) })
+	i.transactionOnce.Do(func() { i.transaction = transaction.New(i.db) })
 	return i.transaction
 }
 
-func (i *impl) Tx(_ context.Context, fn func(tx Registry) error) error {
-	i.txMu.Lock()
-	defer i.txMu.Unlock()
-	// Clone registry cho transaction. Thêm repository mới thì nhớ thêm vào đây
-	// (với DB thật: truyền *gorm.DB của transaction vào từng repository).
-	return fn(&impl{store: i.store, txMu: i.txMu})
+// Tx chạy fn trong 1 DB transaction: registry truyền vào fn dùng *gorm.DB của transaction,
+// nên mọi repository (lấy qua getter) đều chạy trong transaction đó.
+func (i *impl) Tx(ctx context.Context, fn func(tx Registry) error) error {
+	return i.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		return fn(New(tx))
+	})
 }

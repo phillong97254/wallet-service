@@ -9,13 +9,30 @@ Cần auth-service (JWKS) để verify token: `oauth.jwks_url`. Là chủ của 
 Folder này là 1 project Go độc lập (repo git, module riêng), mở folder lên rồi:
 
 ```bash
-make env              # lần đầu: tạo .env từ .env.example
+make init             # lần đầu: tạo .env, bật Postgres, migrate
 go run ./cmd/grpc    # hoặc: make run
 make test             # go test -race ./...
 ```
 
 Cấu hình ở `config/config.yml`, ghi đè bằng biến môi trường theo quy tắc `.` → `_`
 (ví dụ `REST_SERVER_ADDR=:9999`, `OAUTH_JWKS_URL=...`).
+
+## Database (Postgres)
+
+Service có Postgres riêng (database-per-service), bảng: `wallets`, `transactions`. Repository dùng gorm (`go-lib/database`).
+
+```bash
+make init             # lần đầu: tạo .env, bật Postgres (docker, cổng 54323) và migrate
+make run              # service tự migrate khi khởi động (db.auto_migrate: true)
+make migrate          # chạy tay: migrate up bằng go-tools (giống dự án cũ)
+make redo-migrate     # xoá hết rồi migrate lại (mất dữ liệu)
+```
+
+- Migration: `migration/scripts/000000001_init.*.sql` (schema), `000000002_seed.*.sql` (dữ liệu demo).
+  Thêm thay đổi DB thì tạo cặp file số tiếp theo (`000000003_<tên>.up.sql` / `.down.sql`).
+- Kết nối: `DB_URL` trong `.env` (`postgres://wallet:<DB_PASSWORD>@localhost:54323/wallet_db?sslmode=disable`), không để trong `config.yml`.
+- Dữ liệu Postgres lưu ở `./tmp/postgres_data` (đã gitignore). Xoá thư mục này để làm lại từ đầu.
+- Test cần Postgres: `TEST_DB_URL=...wallet_db_test... make test` (database riêng cho test, sẽ bị xoá dữ liệu); không đặt thì test DB được bỏ qua.
 
 ## Secret và cấu hình
 
@@ -53,7 +70,8 @@ config/                      # config.go (viper) + config.yml
 vendor/                      # thư viện (kể cả go-lib), tạo bằng make mod
 internal/
     domain/
-    internal/repository/{wallet,transaction,memstore}  # Tx khi đổi số dư
+    internal/repository/{wallet,transaction}  # gorm, Tx + SELECT FOR UPDATE khi đổi số dư
+    migration/scripts                        # SQL migration + seed
     internal/service/wallet
     internal/handler/grpc/v1/wallet
 ```

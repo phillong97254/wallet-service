@@ -18,7 +18,7 @@ DOCKER_BIN := docker
 COMPOSE_BIN := ENV=$(ENV) GROUP_NAME=$(GROUP_NAME) PROJECT_NAME=$(PROJECT_NAME) REGISTRY=$(REGISTRY) TAG=$(TAG) docker compose
 COMPOSE_GO_TOOL_RUN := $(COMPOSE_BIN) -f docker-compose.tools.yml run --rm go-tools
 
-.PHONY: env netrc run mod mod-local mod-remote test build-bin up down logs build docker-build docker-login docker-push \
+.PHONY: env netrc db migrate redo-migrate init run mod mod-local mod-remote test build-bin up down logs build docker-build docker-login docker-push \
 	ci-docker-build ci-docker-login ci-docker-push ci-docker-clean gen-proto
 
 # ---------- Go (local) ----------
@@ -56,11 +56,29 @@ mod-remote:
 	go mod edit -dropreplace=$(GO_LIB)
 	@$(MAKE) mod
 
+# Test cần Postgres: đặt TEST_DB_URL tới 1 database riêng cho test (dữ liệu sẽ bị xoá), ví dụ
+# TEST_DB_URL=postgres://<user>:<pass>@localhost:<port>/<db>_test?sslmode=disable make test
 test:
 	go test -race ./...
 
 build-bin:
 	go build -o bin/$(PROJECT_NAME) ./cmd/grpc
+
+# ---------- Database (Postgres local trong Docker) ----------
+# Service cũng tự migrate khi khởi động (db.auto_migrate); các lệnh dưới để chạy tay.
+db:
+	@$(COMPOSE_BIN) up postgres -d --wait
+
+migrate: db
+	@$(COMPOSE_GO_TOOL_RUN) sh -c 'migrate -path ./migration/scripts -database $$DB_URL up'
+
+redo-migrate: db
+	@$(COMPOSE_GO_TOOL_RUN) sh -c 'migrate -path ./migration/scripts -database $$DB_URL drop -f'
+	@$(COMPOSE_GO_TOOL_RUN) sh -c 'migrate -path ./migration/scripts -database $$DB_URL up'
+
+# Lần đầu: tạo .env, bật Postgres, migrate
+init: env migrate
+	@echo 'Database sẵn sàng. Chạy service: make run'
 
 # ---------- Docker compose (chỉ service này) ----------
 up:

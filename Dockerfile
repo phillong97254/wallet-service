@@ -13,6 +13,7 @@ COPY ./go.sum .
 COPY ./config ./config
 COPY ./pkg ./pkg
 COPY ./internal ./internal
+COPY ./migration ./migration
 COPY ./cmd ./cmd
 
 # Build the Go app

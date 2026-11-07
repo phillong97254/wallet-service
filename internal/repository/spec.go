@@ -10,7 +10,6 @@ import (
 type Registry interface {
 	Wallet() wallet.Repository
 	Transaction() transaction.Repository
-	// Tx chạy fn trong 1 transaction. Bản in-memory: tuần tự hoá các thao tác ghi
-	// để đọc-kiểm tra-ghi số dư không bị race (giống SELECT ... FOR UPDATE).
+	// Tx chạy fn trong 1 DB transaction (commit nếu fn trả nil, rollback nếu lỗi).
 	Tx(ctx context.Context, fn func(tx Registry) error) error
 }
