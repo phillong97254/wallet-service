@@ -3,7 +3,7 @@ package wallet
 import (
 	"context"
 
-	auth "github.com/phil/wallet-service/pkg/authkit"
+	auth "github.com/phil/go-lib/authkit"
 )
 
 // canAccess: quyền trên tài nguyên cụ thể. Superadmin xem được mọi ví,

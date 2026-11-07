@@ -3,13 +3,13 @@ FROM golang:1.26.1 AS builder
 LABEL stage=Builder
 
 ENV GROUP_NAME=phil
+ENV GOPRIVATE=github.com/phil/*
 ENV PROJECT_NAME=wallet-service
 
 WORKDIR /app
+COPY ./vendor ./vendor
 COPY ./go.mod .
 COPY ./go.sum .
-RUN go mod download
-
 COPY ./config ./config
 COPY ./pkg ./pkg
 COPY ./internal ./internal

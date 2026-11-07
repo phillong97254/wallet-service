@@ -1,7 +1,7 @@
 package routes
 
 import (
-	auth "github.com/phil/wallet-service/pkg/authkit"
+	auth "github.com/phil/go-lib/authkit"
 	walletv1 "github.com/phil/wallet-service/pkg/gen/wallet/v1"
 )
 
