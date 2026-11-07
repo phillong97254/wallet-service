@@ -4,3 +4,5 @@ tmp/
 Dockerfile
 docker-compose*.yml
 Makefile
+.env
+.git

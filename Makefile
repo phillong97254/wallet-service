@@ -10,15 +10,21 @@ GO_LIB:=github.com/phillong97254/go-lib
 GO_LIB_VERSION:=latest
 GO_LIB_LOCAL:=../go-lib
 GOPRIVATE:=github.com/phillong97254/*
+# Biến môi trường local (secret) từ .env, không commit. Tạo bằng: make env
+-include .env
+export
 # Shorten cmd
 DOCKER_BIN := docker
 COMPOSE_BIN := ENV=$(ENV) GROUP_NAME=$(GROUP_NAME) PROJECT_NAME=$(PROJECT_NAME) REGISTRY=$(REGISTRY) TAG=$(TAG) docker compose
 COMPOSE_GO_TOOL_RUN := $(COMPOSE_BIN) -f docker-compose.tools.yml run --rm go-tools
 
-.PHONY: netrc run mod mod-local mod-remote test build-bin up down logs build docker-build docker-login docker-push \
+.PHONY: env netrc run mod mod-local mod-remote test build-bin up down logs build docker-build docker-login docker-push \
 	ci-docker-build ci-docker-login ci-docker-push ci-docker-clean gen-proto
 
 # ---------- Go (local) ----------
+env:
+	@test -f .env && echo ".env đã có" || (cp .env.example .env && echo "Đã tạo .env từ .env.example, nhớ điền secret")
+
 run:
 	go run ./cmd/grpc
 

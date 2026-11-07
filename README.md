@@ -9,12 +9,21 @@ Cần auth-service (JWKS) để verify token: `oauth.jwks_url`. Là chủ của 
 Folder này là 1 project Go độc lập (repo git, module riêng), mở folder lên rồi:
 
 ```bash
+make env              # lần đầu: tạo .env từ .env.example
 go run ./cmd/grpc    # hoặc: make run
 make test             # go test -race ./...
 ```
 
 Cấu hình ở `config/config.yml`, ghi đè bằng biến môi trường theo quy tắc `.` → `_`
 (ví dụ `REST_SERVER_ADDR=:9999`, `OAUTH_JWKS_URL=...`).
+
+## Secret và cấu hình
+
+- `config/config.yml` **được commit**: chỉ chứa giá trị mặc định, không chứa secret.
+- Secret đặt trong `.env` (đã có trong `.gitignore` và `.dockerignore`, không commit, không vào image).
+  `make env` tạo `.env` từ `.env.example`, sau đó điền giá trị. `make run` tự nạp `.env`.
+- Thiếu secret thì service dừng ngay lúc khởi động và báo tên biến cần đặt.
+- Trên server/CI: truyền secret bằng biến môi trường (GitHub Actions secrets, Docker/K8s secret...), không dùng `.env` commit lên.
 
 ## Thư viện (make mod)
 
