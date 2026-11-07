@@ -1,0 +1,12 @@
+grpc_server:
+  name: wallet-service
+  addr: ":50051"
+
+api:
+  version: v1.0.0
+  env: debug
+
+oauth:
+  jwks_url: http://localhost:9000/.well-known/jwks.json
+  issuer: http://localhost:9000
+  audience: admin-api

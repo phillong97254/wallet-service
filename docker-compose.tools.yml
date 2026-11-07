@@ -1,0 +1,8 @@
+name: "go-admin-wallet-wallet-service"
+services:
+  go-tools:
+    container_name: ${GROUP_NAME:-phil}-wallet-service-go-tools-${ENV:-dev}
+    image: sangnv/bizgroup-go-tools:v1.26.1
+    volumes:
+      - .:/tool
+    working_dir: /tool

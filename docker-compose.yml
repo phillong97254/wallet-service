@@ -1,0 +1,23 @@
+name: "go-admin-wallet-wallet-service"
+# Chạy riêng service này trong Docker (make up). Các service khác chạy trên máy (go run)
+# hoặc container khác, gọi qua host.docker.internal. Chạy cả hệ thống: docker-compose.yml ở thư mục gốc.
+services:
+  wallet-service:
+    container_name: wallet-service-${ENV:-dev}
+    image: ${REGISTRY:-go-admin-wallet}/wallet-service:${TAG:-dev-latest}
+    build:
+      context: .
+    ports:
+      - "50051:50051"
+    environment:
+      GRPC_SERVER_ADDR: ":50051"
+      OAUTH_JWKS_URL: http://host.docker.internal:9000/.well-known/jwks.json
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    networks:
+      - wallet-service-network
+
+networks:
+  wallet-service-network:
+    driver: bridge

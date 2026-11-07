@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package wallet.v1;
+
+option go_package = "github.com/phil/wallet-service/pkg/gen/wallet/v1;walletv1";
+
+// WalletService giữ thông tin ví của admin.
+// Mỗi RPC yêu cầu scope riêng (xem cmd/grpc/routes/policies.go của wallet-service).
+service WalletService {
+  rpc GetWallet(GetWalletRequest) returns (Wallet);                 // scope: wallet:read
+  rpc ListTransactions(ListTransactionsRequest) returns (ListTransactionsResponse); // scope: wallet:read
+  rpc AdjustBalance(AdjustBalanceRequest) returns (Wallet);         // scope: wallet:write + role: superadmin
+}
+
+message GetWalletRequest { string admin_id = 1; }
+
+message Wallet {
+  string admin_id = 1;
+  string currency = 2;
+  int64 balance = 3; // đơn vị nhỏ nhất (ví dụ: đồng)
+  int64 updated_at_unix = 4;
+}
+
+message ListTransactionsRequest {
+  string admin_id = 1;
+  int32 limit = 2;
+}
+
+message Transaction {
+  string id = 1;
+  int64 amount = 2;
+  string note = 3;
+  string created_by = 4;
+  int64 created_at_unix = 5;
+}
+
+message ListTransactionsResponse { repeated Transaction items = 1; }
+
+message AdjustBalanceRequest {
+  string admin_id = 1;
+  int64 amount = 2; // âm = trừ tiền
+  string note = 3;
+}
