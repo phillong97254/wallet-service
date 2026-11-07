@@ -33,8 +33,8 @@ Code dùng chung (`authkit`, `apperr`) nằm ở repo **go-lib** (`github.com/ph
 ```bash
 make mod                          # go get -u thư viện + go mod tidy + go mod vendor
 make mod GO_LIB_VERSION=v0.2.0    # chốt go-lib ở 1 version (khi dùng remote)
-make mod-local                    # dùng ../go-lib (replace) – mặc định hiện tại vì go-lib chưa push
-make mod-remote                   # bỏ replace, lấy go-lib theo version từ remote (cần make netrc nếu repo private)
+make mod-local                    # dùng ../go-lib (replace) khi đang sửa go-lib cùng lúc
+make mod-remote                   # bỏ replace, lấy go-lib theo version từ GitHub (mặc định hiện tại)
 ```
 
 ## Docker
