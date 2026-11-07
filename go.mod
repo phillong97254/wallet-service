@@ -1,4 +1,4 @@
-module github.com/phil/wallet-service
+module github.com/phillong97254/wallet-service
 
 go 1.26.0
 
@@ -22,11 +22,11 @@ require (
 )
 
 require (
-	github.com/phil/go-lib v0.0.0
+	github.com/phillong97254/go-lib v0.0.0
 	golang.org/x/net v0.62.0 // indirect
 	golang.org/x/sys v0.49.0 // indirect
 	golang.org/x/text v0.43.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20261104224025-d1e00e9f33ab // indirect
 )
 
-replace github.com/phil/go-lib => ../go-lib
+replace github.com/phillong97254/go-lib => ../go-lib

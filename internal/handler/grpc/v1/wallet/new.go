@@ -3,8 +3,8 @@ package wallet
 import (
 	"log/slog"
 
-	walletSvc "github.com/phil/wallet-service/internal/service/wallet"
-	walletv1 "github.com/phil/wallet-service/pkg/gen/wallet/v1"
+	walletSvc "github.com/phillong97254/wallet-service/internal/service/wallet"
+	walletv1 "github.com/phillong97254/wallet-service/pkg/gen/wallet/v1"
 )
 
 // impl hiện thực walletv1.WalletServiceServer (interface sinh từ proto đóng vai trò spec.go).

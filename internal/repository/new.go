@@ -4,9 +4,9 @@ import (
 	"context"
 	"sync"
 
-	"github.com/phil/wallet-service/internal/repository/memstore"
-	"github.com/phil/wallet-service/internal/repository/transaction"
-	"github.com/phil/wallet-service/internal/repository/wallet"
+	"github.com/phillong97254/wallet-service/internal/repository/memstore"
+	"github.com/phillong97254/wallet-service/internal/repository/transaction"
+	"github.com/phillong97254/wallet-service/internal/repository/wallet"
 )
 
 type impl struct {

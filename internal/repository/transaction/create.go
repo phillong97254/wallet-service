@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/phil/wallet-service/internal/domain"
+	"github.com/phillong97254/wallet-service/internal/domain"
 )
 
 func (i *impl) Create(_ context.Context, tx domain.Transaction) (domain.Transaction, error) {

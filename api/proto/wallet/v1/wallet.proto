@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package wallet.v1;
 
-option go_package = "github.com/phil/wallet-service/pkg/gen/wallet/v1;walletv1";
+option go_package = "github.com/phillong97254/wallet-service/pkg/gen/wallet/v1;walletv1";
 
 // WalletService giữ thông tin ví của admin.
 // Mỗi RPC yêu cầu scope riêng (xem cmd/grpc/routes/policies.go của wallet-service).

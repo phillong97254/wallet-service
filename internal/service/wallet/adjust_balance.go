@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"time"
 
-	auth "github.com/phil/go-lib/authkit"
-	"github.com/phil/wallet-service/internal/domain"
-	"github.com/phil/wallet-service/internal/repository"
-	walletRepo "github.com/phil/wallet-service/internal/repository/wallet"
+	auth "github.com/phillong97254/go-lib/authkit"
+	"github.com/phillong97254/wallet-service/internal/domain"
+	"github.com/phillong97254/wallet-service/internal/repository"
+	walletRepo "github.com/phillong97254/wallet-service/internal/repository/wallet"
 )
 
 // AdjustBalance cộng/trừ số dư và ghi giao dịch (audit created_by) trong cùng 1 transaction.

@@ -3,7 +3,7 @@ package wallet
 import (
 	"log/slog"
 
-	"github.com/phil/wallet-service/internal/repository"
+	"github.com/phillong97254/wallet-service/internal/repository"
 )
 
 type impl struct {

@@ -3,7 +3,7 @@ package wallet
 import (
 	"time"
 
-	"github.com/phil/wallet-service/internal/domain"
+	"github.com/phillong97254/wallet-service/internal/domain"
 )
 
 type WalletOutput struct {

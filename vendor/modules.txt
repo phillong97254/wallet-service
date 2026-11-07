@@ -15,9 +15,9 @@ github.com/pelletier/go-toml/v2
 github.com/pelletier/go-toml/v2/internal/parserbridge
 github.com/pelletier/go-toml/v2/internal/tracker
 github.com/pelletier/go-toml/v2/unstable
-# github.com/phil/go-lib v0.0.0 => ../go-lib
+# github.com/phillong97254/go-lib v0.0.0 => ../go-lib
 ## explicit; go 1.26.0
-github.com/phil/go-lib/authkit
+github.com/phillong97254/go-lib/authkit
 # github.com/sagikazarmark/locafero v0.12.0
 ## explicit; go 1.23.0
 github.com/sagikazarmark/locafero
@@ -178,4 +178,4 @@ google.golang.org/protobuf/runtime/protoimpl
 google.golang.org/protobuf/types/known/anypb
 google.golang.org/protobuf/types/known/durationpb
 google.golang.org/protobuf/types/known/timestamppb
-# github.com/phil/go-lib => ../go-lib
+# github.com/phillong97254/go-lib => ../go-lib

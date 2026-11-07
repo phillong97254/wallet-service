@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	walletRepo "github.com/phil/wallet-service/internal/repository/wallet"
+	walletRepo "github.com/phillong97254/wallet-service/internal/repository/wallet"
 )
 
 func (i *impl) GetWallet(ctx context.Context, input GetWalletInput) (WalletOutput, error) {

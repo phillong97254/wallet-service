@@ -1,8 +1,8 @@
 package routes
 
 import (
-	auth "github.com/phil/go-lib/authkit"
-	walletv1 "github.com/phil/wallet-service/pkg/gen/wallet/v1"
+	auth "github.com/phillong97254/go-lib/authkit"
+	walletv1 "github.com/phillong97254/wallet-service/pkg/gen/wallet/v1"
 )
 
 // Policies: authz lớp 1 (coarse-grained), map tên RPC -> scope + role.

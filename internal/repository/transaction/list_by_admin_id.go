@@ -4,7 +4,7 @@ import (
 	"context"
 	"slices"
 
-	"github.com/phil/wallet-service/internal/domain"
+	"github.com/phillong97254/wallet-service/internal/domain"
 )
 
 func (i *impl) ListByAdminID(_ context.Context, adminID string, limit int) ([]domain.Transaction, error) {

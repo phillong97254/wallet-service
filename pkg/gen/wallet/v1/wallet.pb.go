@@ -396,7 +396,7 @@ const file_wallet_v1_wallet_proto_rawDesc = "" +
 	"\rWalletService\x12;\n" +
 	"\tGetWallet\x12\x1b.wallet.v1.GetWalletRequest\x1a\x11.wallet.v1.Wallet\x12[\n" +
 	"\x10ListTransactions\x12\".wallet.v1.ListTransactionsRequest\x1a#.wallet.v1.ListTransactionsResponse\x12C\n" +
-	"\rAdjustBalance\x12\x1f.wallet.v1.AdjustBalanceRequest\x1a\x11.wallet.v1.WalletB;Z9github.com/phil/wallet-service/pkg/gen/wallet/v1;walletv1b\x06proto3"
+	"\rAdjustBalance\x12\x1f.wallet.v1.AdjustBalanceRequest\x1a\x11.wallet.v1.WalletBDZBgithub.com/phillong97254/wallet-service/pkg/gen/wallet/v1;walletv1b\x06proto3"
 
 var (
 	file_wallet_v1_wallet_proto_rawDescOnce sync.Once

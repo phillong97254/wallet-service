@@ -14,13 +14,13 @@ import (
 
 	"google.golang.org/grpc"
 
-	auth "github.com/phil/go-lib/authkit"
-	"github.com/phil/wallet-service/cmd/grpc/routes"
-	"github.com/phil/wallet-service/config"
-	v1 "github.com/phil/wallet-service/internal/handler/grpc/v1"
-	"github.com/phil/wallet-service/internal/repository"
-	"github.com/phil/wallet-service/internal/repository/memstore"
-	"github.com/phil/wallet-service/internal/service/wallet"
+	auth "github.com/phillong97254/go-lib/authkit"
+	"github.com/phillong97254/wallet-service/cmd/grpc/routes"
+	"github.com/phillong97254/wallet-service/config"
+	v1 "github.com/phillong97254/wallet-service/internal/handler/grpc/v1"
+	"github.com/phillong97254/wallet-service/internal/repository"
+	"github.com/phillong97254/wallet-service/internal/repository/memstore"
+	"github.com/phillong97254/wallet-service/internal/service/wallet"
 )
 
 func main() {

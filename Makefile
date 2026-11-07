@@ -1,15 +1,15 @@
 # Variables
 ENV:=dev
-GROUP_NAME:=phil
+GROUP_NAME:=phillong97254
 PROJECT_NAME:=wallet-service
-REGISTRY:=go-admin-wallet
+REGISTRY:=ghcr.io/phillong97254
 TAG:=dev-latest
 IMAGE:=$(REGISTRY)/$(PROJECT_NAME)
 # Thư viện dùng chung (giống go-library ở các dự án trước)
-GO_LIB:=github.com/phil/go-lib
+GO_LIB:=github.com/phillong97254/go-lib
 GO_LIB_VERSION:=latest
 GO_LIB_LOCAL:=../go-lib
-GOPRIVATE:=github.com/phil/*
+GOPRIVATE:=github.com/phillong97254/*
 # Shorten cmd
 DOCKER_BIN := docker
 COMPOSE_BIN := ENV=$(ENV) GROUP_NAME=$(GROUP_NAME) PROJECT_NAME=$(PROJECT_NAME) REGISTRY=$(REGISTRY) TAG=$(TAG) docker compose
@@ -22,7 +22,7 @@ COMPOSE_GO_TOOL_RUN := $(COMPOSE_BIN) -f docker-compose.tools.yml run --rm go-to
 run:
 	go run ./cmd/grpc
 
-# Credential cho repo private (go-lib): thêm dòng "machine github.com login <user> password <token>"
+# Credential cho repo private (go-lib): thêm dòng "machine github.com login phillong97254 password <personal-access-token>"
 netrc:
 	touch ~/.netrc
 	chmod 600 ~/.netrc

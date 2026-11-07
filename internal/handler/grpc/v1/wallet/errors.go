@@ -6,7 +6,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	walletSvc "github.com/phil/wallet-service/internal/service/wallet"
+	walletSvc "github.com/phillong97254/wallet-service/internal/service/wallet"
 )
 
 // toStatus đổi lỗi nghiệp vụ của service sang gRPC status.

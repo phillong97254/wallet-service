@@ -10,9 +10,9 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 
-	auth "github.com/phil/go-lib/authkit"
-	"github.com/phil/wallet-service/internal/repository"
-	"github.com/phil/wallet-service/internal/repository/memstore"
+	auth "github.com/phillong97254/go-lib/authkit"
+	"github.com/phillong97254/wallet-service/internal/repository"
+	"github.com/phillong97254/wallet-service/internal/repository/memstore"
 )
 
 func newTestService() Service {

@@ -3,7 +3,7 @@ package wallet
 import (
 	"context"
 
-	"github.com/phil/wallet-service/internal/domain"
+	"github.com/phillong97254/wallet-service/internal/domain"
 )
 
 func (i *impl) Save(_ context.Context, w domain.Wallet) error {

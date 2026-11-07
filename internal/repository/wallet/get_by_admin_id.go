@@ -3,7 +3,7 @@ package wallet
 import (
 	"context"
 
-	"github.com/phil/wallet-service/internal/domain"
+	"github.com/phillong97254/wallet-service/internal/domain"
 )
 
 func (i *impl) GetByAdminID(_ context.Context, adminID string) (domain.Wallet, error) {

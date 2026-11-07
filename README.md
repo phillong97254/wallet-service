@@ -18,7 +18,7 @@ Cấu hình ở `config/config.yml`, ghi đè bằng biến môi trường theo 
 
 ## Thư viện (make mod)
 
-Code dùng chung (`authkit`, `apperr`) nằm ở repo **go-lib** (`github.com/phil/go-lib`), giống `go-library`
+Code dùng chung (`authkit`, `apperr`) nằm ở repo **go-lib** (`github.com/phillong97254/go-lib`), giống `go-library`
 ở các dự án trước. Thư viện được vendor vào `vendor/` nên build/Docker không cần mạng hay repo khác.
 
 ```bash
@@ -31,9 +31,9 @@ make mod-remote                   # bỏ replace, lấy go-lib theo version từ
 ## Docker
 
 ```bash
-make build            # docker build -t go-admin-wallet/wallet-service:dev-latest .
+make build            # docker build -t ghcr.io/phillong97254/wallet-service:dev-latest .
 make up               # chạy riêng service này (gọi service khác qua host.docker.internal)
-make ci-docker-build ci-docker-push REGISTRY=<registry>/<group> TAG=v1.0.0
+make ci-docker-build ci-docker-push TAG=v1.0.0   # push lên ghcr.io/phillong97254 (GitHub Container Registry)
 ```
 
 ## Cấu trúc

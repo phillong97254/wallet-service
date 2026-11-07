@@ -4,7 +4,7 @@ name: "go-admin-wallet-wallet-service"
 services:
   wallet-service:
     container_name: wallet-service-${ENV:-dev}
-    image: ${REGISTRY:-go-admin-wallet}/wallet-service:${TAG:-dev-latest}
+    image: ${REGISTRY:-ghcr.io/phillong97254}/wallet-service:${TAG:-dev-latest}
     build:
       context: .
     ports:

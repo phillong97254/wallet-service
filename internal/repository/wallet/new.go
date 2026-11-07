@@ -1,6 +1,6 @@
 package wallet
 
-import "github.com/phil/wallet-service/internal/repository/memstore"
+import "github.com/phillong97254/wallet-service/internal/repository/memstore"
 
 type impl struct {
 	store *memstore.Store

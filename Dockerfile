@@ -1,9 +1,9 @@
-# Build từ chính thư mục service:  docker build -t go-admin-wallet/wallet-service:dev-latest .
+# Build từ chính thư mục service:  docker build -t ghcr.io/phillong97254/wallet-service:dev-latest .
 FROM golang:1.26.1 AS builder
 LABEL stage=Builder
 
-ENV GROUP_NAME=phil
-ENV GOPRIVATE=github.com/phil/*
+ENV GROUP_NAME=phillong97254
+ENV GOPRIVATE=github.com/phillong97254/*
 ENV PROJECT_NAME=wallet-service
 
 WORKDIR /app

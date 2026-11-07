@@ -3,8 +3,8 @@ package repository
 import (
 	"context"
 
-	"github.com/phil/wallet-service/internal/repository/transaction"
-	"github.com/phil/wallet-service/internal/repository/wallet"
+	"github.com/phillong97254/wallet-service/internal/repository/transaction"
+	"github.com/phillong97254/wallet-service/internal/repository/wallet"
 )
 
 type Registry interface {

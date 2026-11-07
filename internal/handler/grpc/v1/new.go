@@ -3,9 +3,9 @@ package v1
 import (
 	"log/slog"
 
-	walletHandler "github.com/phil/wallet-service/internal/handler/grpc/v1/wallet"
-	walletSvc "github.com/phil/wallet-service/internal/service/wallet"
-	walletv1 "github.com/phil/wallet-service/pkg/gen/wallet/v1"
+	walletHandler "github.com/phillong97254/wallet-service/internal/handler/grpc/v1/wallet"
+	walletSvc "github.com/phillong97254/wallet-service/internal/service/wallet"
+	walletv1 "github.com/phillong97254/wallet-service/pkg/gen/wallet/v1"
 )
 
 type impl struct {
