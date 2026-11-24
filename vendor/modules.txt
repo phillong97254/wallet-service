@@ -1,3 +1,9 @@
+# github.com/cespare/xxhash/v2 v2.3.0
+## explicit; go 1.11
+github.com/cespare/xxhash/v2
+# github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f
+## explicit
+github.com/dgryski/go-rendezvous
 # github.com/fsnotify/fsnotify v1.10.1
 ## explicit; go 1.23
 github.com/fsnotify/fsnotify
@@ -61,6 +67,16 @@ github.com/pelletier/go-toml/v2/unstable
 ## explicit; go 1.26.0
 github.com/phillong97254/go-lib/authkit
 github.com/phillong97254/go-lib/database
+# github.com/redis/go-redis/v9 v9.7.3
+## explicit; go 1.18
+github.com/redis/go-redis/v9
+github.com/redis/go-redis/v9/internal
+github.com/redis/go-redis/v9/internal/hashtag
+github.com/redis/go-redis/v9/internal/hscan
+github.com/redis/go-redis/v9/internal/pool
+github.com/redis/go-redis/v9/internal/proto
+github.com/redis/go-redis/v9/internal/rand
+github.com/redis/go-redis/v9/internal/util
 # github.com/sagikazarmark/locafero v0.12.0
 ## explicit; go 1.23.0
 github.com/sagikazarmark/locafero

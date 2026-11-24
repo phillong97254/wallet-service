@@ -3,12 +3,15 @@ module github.com/phillong97254/wallet-service
 go 1.26.0
 
 require (
+	github.com/redis/go-redis/v9 v9.7.3
 	github.com/spf13/viper v1.21.0
 	google.golang.org/grpc v1.85.0
 	gorm.io/gorm v1.31.2
 )
 
 require (
+	github.com/cespare/xxhash/v2 v2.3.0 // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/golang-migrate/migrate/v4 v4.20.1 // indirect
 	github.com/jackc/pgerrcode v0.0.0-20220416144525-469b46aa5efa // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect

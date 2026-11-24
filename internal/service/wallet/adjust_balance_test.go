@@ -13,6 +13,7 @@ import (
 
 	auth "github.com/phillong97254/go-lib/authkit"
 	"github.com/phillong97254/go-lib/database"
+	walletCache "github.com/phillong97254/wallet-service/internal/cache/wallet"
 	"github.com/phillong97254/wallet-service/internal/repository"
 	"github.com/phillong97254/wallet-service/migration"
 )
@@ -20,6 +21,11 @@ import (
 // newTestService chạy với Postgres thật: đặt TEST_DB_URL (DB riêng cho test, sẽ bị xoá dữ liệu),
 // ví dụ TEST_DB_URL=postgres://postgres:postgres@localhost:54323/wallet_test?sslmode=disable make test
 func newTestService(t *testing.T) Service {
+	t.Helper()
+	return newTestServiceWithCache(t, walletCache.New("", "", 0))
+}
+
+func newTestServiceWithCache(t *testing.T, cache walletCache.Cache) Service {
 	t.Helper()
 	url := os.Getenv("TEST_DB_URL")
 	if url == "" {
@@ -48,7 +54,7 @@ func newTestService(t *testing.T) Service {
 			sqlDB.Close()
 		}
 	})
-	return New(slog.New(slog.NewTextHandler(io.Discard, nil)), repository.New(db))
+	return New(slog.New(slog.NewTextHandler(io.Discard, nil)), repository.New(db), cache)
 }
 
 func ctxAs(sub string, roles ...string) context.Context {

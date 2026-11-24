@@ -11,6 +11,11 @@ oauth:
   issuer: http://localhost:9000
   audience: admin-api
 
+redis:
+  addr: "" # đặt qua env REDIS_ADDR (rỗng = tắt cache)
+  password: "" # KHÔNG ghi ở đây, đặt qua env REDIS_PASSWORD
+  cache_ttl_seconds: 30
+
 db:
   url: "" # KHÔNG ghi ở đây, đặt qua env DB_URL (file .env, không commit)
   max_open_connections: 20

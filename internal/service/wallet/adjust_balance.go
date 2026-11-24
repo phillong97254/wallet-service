@@ -55,6 +55,11 @@ func (i *impl) AdjustBalance(ctx context.Context, input AdjustBalanceInput) (Wal
 		return WalletOutput{}, err
 	}
 
+	// Xoá sau khi commit; nếu xoá lỗi thì cache sai tối đa tới hết TTL.
+	if err := i.cache.Delete(ctx, input.AdminID); err != nil {
+		i.logger.Warn("invalidate wallet cache failed", "admin_id", input.AdminID, "err", err)
+	}
+
 	i.logger.Info("balance adjusted", "admin_id", input.AdminID, "amount", input.Amount, "by", c.Subject)
 	return toWalletOutput(updated), nil
 }

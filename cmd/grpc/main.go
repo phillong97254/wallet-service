@@ -11,6 +11,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"google.golang.org/grpc"
 
@@ -18,6 +19,7 @@ import (
 	"github.com/phillong97254/go-lib/database"
 	"github.com/phillong97254/wallet-service/cmd/grpc/routes"
 	"github.com/phillong97254/wallet-service/config"
+	walletCache "github.com/phillong97254/wallet-service/internal/cache/wallet"
 	v1 "github.com/phillong97254/wallet-service/internal/handler/grpc/v1"
 	"github.com/phillong97254/wallet-service/internal/repository"
 	"github.com/phillong97254/wallet-service/internal/service/wallet"
@@ -58,7 +60,8 @@ func main() {
 
 	// Repository -> Service -> Handler
 	repo := repository.New(db)
-	walletService := wallet.New(logger, repo)
+	cache := walletCache.New(cfg.Redis.Addr, cfg.Redis.Password, time.Duration(cfg.Redis.CacheTTLSeconds)*time.Second)
+	walletService := wallet.New(logger, repo, cache)
 	handler := v1.New(logger, walletService)
 
 	// Register Routes

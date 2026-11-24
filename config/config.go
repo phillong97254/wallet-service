@@ -12,6 +12,14 @@ type Config struct {
 	API        API        `mapstructure:"api"`
 	OAuth      OAuth      `mapstructure:"oauth"`
 	DB         Database   `mapstructure:"db"`
+	Redis      Redis      `mapstructure:"redis"`
+}
+
+// Redis: cache số dư ví. Addr rỗng = tắt cache. Mật khẩu lấy từ env REDIS_PASSWORD.
+type Redis struct {
+	Addr            string `mapstructure:"addr"`
+	Password        string `mapstructure:"password"`
+	CacheTTLSeconds int    `mapstructure:"cache_ttl_seconds"`
 }
 
 // Database: URL (có mật khẩu) lấy từ env DB_URL, không để trong config.yml.
