@@ -17,7 +17,7 @@ COPY ./migration ./migration
 COPY ./cmd ./cmd
 
 # Build the Go app
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -ldflags="-s -w" -installsuffix cgo -o main ./cmd/grpc
+RUN CGO_ENABLED=0 GOOS=linux go build -a -ldflags="-s -w" -installsuffix cgo -o main ./cmd/grpc
 
 
 FROM alpine:latest AS final
